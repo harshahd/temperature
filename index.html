@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Temperature - Search weather of any location</title>
+</head>
+<body>
+    <div>
+    <main>
+        <div>
+            <h1>Temperature - search for weather details</h1>
+    <p>This application uses <a href="https://open-meteo.com" target="_blank">Open meteo's free weather API (Opens in new window)</a> and provides you detailed weather info for the specified location</p>
+    </div>
+    <div>
+        <h2>Get weather details</h2>
+        <button id="location-btn">Get my present location</button>
+        <p id="location-info"></p>
+        <p>or</p>
+        <div role="search">
+    <form id="search-form">                
+                <div>
+                <label for="city-pin-search">Search for your city or pincode</label>
+            <input id="city-pin-search" type="search" autocomplete="address-level2 | postal-code" aria-autocomplete="both" required>
+            </div>
+            <button type="submit">Search</button>
+            <button type="reset">Clear search input</button>
+            </form>
+        </div>
+    </div>
+    </main>
+    </div>
+    <script>
+        let locationBTN=document.getElementById("location-btn");
+        let searchForm=document.getElementById("search-form");
+const baseUrl="https://api.open-meteo.com/v1/forecast?";
+
+        const getWhether=async (lt,lg) => {
+const url=`${baseUrl}latitude=${lt}&longitude=${lg}&hourly=temperature_2m`;
+// console.log(url);
+try {
+    const rsp=await fetch(url);
+    if(rsp.status===200) {
+        const data =await rsp.json();
+        return data;
+    }
+    else
+    return null;
+}
+catch(e) {
+    console.log(e);
+    return null;
+}
+        };
+        searchForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+        });
+locationBTN.addEventListener('click', async (e) => {
+        if(navigator.geolocation) {
+        locationBTN.disabled=true;
+        navigator.geolocation.getCurrentPosition(async (pos) => {
+const lat=pos.coords.latitude;
+const lng=pos.coords.longitude;
+whetherData=await getWhether(lat,lng);
+if(whetherData) {
+    alert(JSON.stringify(whetherData));
+}
+        }, (err) => {
+            alert("Error getting your location");               
+        });
+    }
+});
+        </script>
+</body>
+</html>
