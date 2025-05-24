@@ -128,7 +128,7 @@ locList.appendChild(locItem);
         }
         else {
             let locLink=locList.children[i].querySelector("a");
-            locLink.href=`/display_whether?lat=${loc.latitude}&long=${loc.longitude}`;
+            locLink.href=`/display_whether?lat=${loc.latitude}&long=${loc.longitude}&hourly=temperature_2m`;
 locLink.textContent=loc.name;
         }
     });
